@@ -2,72 +2,155 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <meta name="theme-color" content="#f5f7fa">
+
   <title>🚗 자동차 친구 🚗</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <header>
-    <h1>🚗 자동차 친구 🚗</h1>
-    <p>좋아하는 자동차를 만나보세요!</p>
-  </header>
+<header>
+  <h1>🚗 자동차 친구 🚗</h1>
+  <p>좋아하는 자동차를 만나보세요!</p>
+</header>
 
-  <main>
 
-    <div class="category-buttons">
-      <button onclick="showCategory('소방차')">🚒 소방차</button>
-      <button onclick="showCategory('경찰차')">🚓 경찰차</button>
-      <button onclick="showCategory('구급차')">🚑 구급차</button>
-      <button onclick="showCategory('버스')">🚌 버스</button>
-      <button onclick="showCategory('테슬라')">⚡ 테슬라</button>
-      <button onclick="showCategory('페라리')">🏎️ 페라리</button>
-      <button onclick="showCategory('람보르기니')">🐂 람보르기니</button>
+<main>
+
+  <!-- 자동차 카테고리 -->
+
+  <section class="categories">
+
+    <button data-category="소방차">
+      🚒
+      <span>소방차</span>
+    </button>
+
+    <button data-category="경찰차">
+      🚓
+      <span>경찰차</span>
+    </button>
+
+    <button data-category="구급차">
+      🚑
+      <span>구급차</span>
+    </button>
+
+    <button data-category="버스">
+      🚌
+      <span>버스</span>
+    </button>
+
+    <button data-category="테슬라">
+      ⚡
+      <span>테슬라</span>
+    </button>
+
+    <button data-category="페라리">
+      🏎️
+      <span>페라리</span>
+    </button>
+
+    <button data-category="람보르기니">
+      🐂
+      <span>람보르기니</span>
+    </button>
+
+  </section>
+
+
+  <!-- 자동차 -->
+
+  <section class="viewer">
+
+    <div id="loading" class="loading hidden">
+      🚗 자동차를 찾고 있어요...
     </div>
 
-    <div class="car-card">
 
-      <div class="image-area">
-        <img id="carImage"
-             src=""
-             alt="자동차"
-             onclick="speakCar()">
+    <div id="photoBox" class="photo-box">
+
+      <img
+        id="carImage"
+        src=""
+        alt="자동차 사진"
+        draggable="false"
+      >
+
+      <div class="photo-hint">
+        👆 사진을 눌러보세요!
       </div>
 
-      <div class="car-name" id="carName">
-        자동차를 골라보세요!
-      </div>
-
-      <div class="car-category" id="carCategory"></div>
-
-      <button class="sound-button" onclick="speakCar()">
-        🔊 이름 듣기
-      </button>
-
     </div>
 
-    <div class="navigation">
-      <button onclick="previousCar()">⬅️</button>
 
-      <button class="random-button" onclick="randomCar()">
-        🎲 랜덤 자동차
-      </button>
+    <div id="emojiBox" class="emoji-box hidden"></div>
 
-      <button onclick="nextCar()">➡️</button>
+
+    <div id="carName" class="car-name">
+      자동차 친구
     </div>
 
-    <div class="counter" id="counter"></div>
 
-  </main>
+    <div id="carCategory" class="car-category">
+    </div>
 
-  <footer>
-    🚗 자동차 친구 🚗
-  </footer>
 
-  <script src="cars.js"></script>
-  <script src="script.js"></script>
+    <button id="speakButton" class="speak-button">
+      🔊 이름 듣기
+    </button>
+
+
+    <div id="credit" class="credit">
+    </div>
+
+
+    <div id="error" class="error hidden">
+    </div>
+
+  </section>
+
+
+  <!-- 이동 버튼 -->
+
+  <section class="controls">
+
+    <button id="prevButton" class="arrow">
+      ⬅️
+    </button>
+
+
+    <button id="randomButton" class="random">
+      🎲 랜덤 자동차
+    </button>
+
+
+    <button id="nextButton" class="arrow">
+      ➡️
+    </button>
+
+  </section>
+
+
+  <div id="counter" class="counter">
+  </div>
+
+</main>
+
+
+<footer>
+  🚗 자동차 친구 🚗
+</footer>
+
+
+<script src="config.js"></script>
+<script src="cars.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
