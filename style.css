@@ -1,0 +1,167 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+  color: #222;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+header {
+  text-align: center;
+  padding: 20px 10px 10px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+header p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #666;
+}
+
+main {
+  max-width: 600px;
+  margin: auto;
+  padding: 10px 15px 30px;
+}
+
+
+/* 카테고리 */
+
+.category-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.category-buttons button {
+  border: none;
+  border-radius: 18px;
+  padding: 14px 8px;
+  font-size: 17px;
+  font-weight: bold;
+  background: white;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  cursor: pointer;
+}
+
+.category-buttons button:active {
+  transform: scale(0.95);
+}
+
+
+/* 자동차 카드 */
+
+.car-card {
+  background: white;
+  border-radius: 28px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.10);
+}
+
+.image-area {
+  width: 100%;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.big-emoji {
+  font-size: 150px;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.big-emoji:active {
+  transform: scale(1.15);
+}
+
+
+.car-name {
+  margin-top: 18px;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.car-category {
+  margin-top: 7px;
+  font-size: 17px;
+  color: #777;
+}
+
+
+/* 음성 버튼 */
+
+.sound-button {
+  margin-top: 18px;
+  border: none;
+  border-radius: 18px;
+  padding: 14px 24px;
+  font-size: 18px;
+  font-weight: bold;
+  background: #eeeeee;
+}
+
+.sound-button:active {
+  transform: scale(0.95);
+}
+
+
+/* 이동 버튼 */
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.navigation > button {
+  border: none;
+  border-radius: 18px;
+  padding: 15px 18px;
+  font-size: 25px;
+  background: white;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.random-button {
+  font-size: 17px !important;
+  font-weight: bold;
+  padding: 16px !important;
+}
+
+.navigation button:active {
+  transform: scale(0.93);
+}
+
+
+.counter {
+  text-align: center;
+  margin-top: 12px;
+  color: #777;
+  font-size: 14px;
+}
+
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+}
