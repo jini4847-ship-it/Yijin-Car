@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🚗 빵빵! 자동차 박물관 🚗</title>
+  <title>🚗 빵빵! 진짜 자동차 박물관 🚗</title>
   <style>
     * {
       box-sizing: border-box;
@@ -55,18 +55,19 @@
     .main-card {
       width: 100%;
       max-width: 360px;
-      height: 280px;
+      height: 320px;
       background: white;
       border: 6px solid #FFB300;
       border-radius: 25px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       padding: 15px;
       cursor: pointer;
       transition: transform 0.1s;
+      overflow: hidden;
     }
 
     .main-card:active {
@@ -75,15 +76,16 @@
 
     .main-card img {
       width: 100%;
-      height: 180px;
-      object-fit: contain;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 15px;
     }
 
     .car-title {
       font-size: 2rem;
       font-weight: bold;
       color: #D84315;
-      margin-top: 10px;
+      margin-top: 5px;
     }
 
     /* 자동차 그리드 선택창 */
@@ -100,7 +102,7 @@
       background: white;
       border: 3px solid #B2EBF2;
       border-radius: 15px;
-      padding: 8px;
+      padding: 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -114,8 +116,9 @@
 
     .thumb-card img {
       width: 100%;
-      height: 60px;
-      object-fit: contain;
+      height: 65px;
+      object-fit: cover;
+      border-radius: 8px;
     }
 
     .thumb-card span {
@@ -128,7 +131,7 @@
 </head>
 <body>
 
-  <h1>🚗 빵빵! 자동차 박물관 🚗</h1>
+  <h1>🚗 빵빵! 진짜 자동차 박물관 🚗</h1>
 
   <!-- 카테고리 필터 -->
   <div class="filter-group">
@@ -138,56 +141,98 @@
     <button class="filter-btn" onclick="filterCategory('super', this)">슈퍼카</button>
   </div>
 
-  <!-- 큰 카드 (메인) -->
+  <!-- 큰 카드 (메인 실물 사진) -->
   <div class="main-card" onclick="speakCurrentCar()">
-    <img id="main-img" src="" alt="자동차 이미지">
+    <img id="main-img" src="" alt="자동차 사진">
     <div class="car-title" id="main-title"></div>
   </div>
 
-  <!-- 아이가 누를 수 있는 자동차 리스트 -->
+  <!-- 작은 사진 목록 -->
   <div class="grid-container" id="grid"></div>
 
   <script>
-    // 자동차 데이터 세팅
+    // 자동차 실물 고화질 사진 데이터
     const cars = [
       // 일하는 차
-      { id: 1, category: 'work', name: "소방차", desc: "삐뽀삐뽀! 불을 끄는 소방차!", img: "https://cdn-icons-png.flaticon.com/512/3209/3209995.png" },
-      { id: 2, category: 'work', name: "덤프트럭", desc: "쿵쾅쿵쾅! 흙을 나르는 덤프트럭!", img: "https://cdn-icons-png.flaticon.com/512/2554/2554932.png" },
+      { 
+        id: 1, 
+        category: 'work', 
+        name: "소방차", 
+        desc: "삐뽀삐뽀! 불을 끄는 빨간 소방차!", 
+        img: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80" 
+      },
+      { 
+        id: 2, 
+        category: 'work', 
+        name: "덤프트럭", 
+        desc: "쿵쾅쿵쾅! 흙을 가득 나르는 덤프트럭!", 
+        img: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=600&q=80" 
+      },
       
       // 버스 / 일반차
-      { id: 3, category: 'bus', name: "버스", desc: "부르릉! 손님을 태우는 큰 버스!", img: "https://cdn-icons-png.flaticon.com/512/3448/3448339.png" },
-      { id: 4, category: 'bus', name: "타요 버스", desc: "안녕! 나는 파란색 꼬마버스 타요!", img: "https://cdn-icons-png.flaticon.com/512/1048/1048313.png" },
-      { id: 5, category: 'bus', name: "테슬라", desc: "스윽~ 소리 없이 달리는 전기차 테슬라!", img: "https://cdn-icons-png.flaticon.com/512/820/820374.png" },
+      { 
+        id: 3, 
+        category: 'bus', 
+        name: "버스", 
+        desc: "부르릉! 손님을 많이 태우는 버스!", 
+        img: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=600&q=80" 
+      },
+      { 
+        id: 4, 
+        category: 'bus', 
+        name: "타요 버스", 
+        desc: "안녕! 귀여운 파란색 타요 꼬마버스!", 
+        img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80" 
+      },
+      { 
+        id: 5, 
+        category: 'bus', 
+        name: "테슬라", 
+        desc: "스윽~ 소리 없이 빠르게 달리는 전기차 테슬라!", 
+        img: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?auto=format&fit=crop&w=600&q=80" 
+      },
 
       // 스포츠카 / 슈퍼카
-      { id: 6, category: 'super', name: "스포츠카", desc: "쌩쌩! 정말 빠른 빨간 스포츠카!", img: "https://cdn-icons-png.flaticon.com/512/744/744465.png" },
-      { id: 7, category: 'super', name: "페라리", desc: "쿠앙! 삼각 말 마크가 멋진 슈퍼카 페라리!", img: "https://cdn-icons-png.flaticon.com/512/296/296216.png" },
-      { id: 8, category: 'super', name: "람보르기니", desc: "콰아앙! 황소처럼 멋진 슈퍼카 람보르기니!", img: "https://cdn-icons-png.flaticon.com/512/1085/1085961.png" }
+      { 
+        id: 6, 
+        category: 'super', 
+        name: "스포츠카", 
+        desc: "쌩쌩! 도로를 신나게 달리는 스포츠카!", 
+        img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80" 
+      },
+      { 
+        id: 7, 
+        category: 'super', 
+        name: "페라리", 
+        desc: "쿠앙! 정말 빠르게 달리는 빨간색 페라리!", 
+        img: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=600&q=80" 
+      },
+      { 
+        id: 8, 
+        category: 'super', 
+        name: "람보르기니", 
+        desc: "콰아앙! 황소처럼 멋지고 강한 람보르기니!", 
+        img: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=600&q=80" 
+      }
     ];
 
     let currentCar = cars[0];
     let currentFilter = 'all';
 
-    // 화면 초기화
     function init() {
       selectCar(cars[0]);
       renderGrid();
     }
 
-    // 메인 카드 변경 및 읽어주기
     function selectCar(car) {
       currentCar = car;
       document.getElementById('main-img').src = car.img;
       document.getElementById('main-title').textContent = car.name;
       
-      // 음성 재생
       speak(car.desc);
-
-      // 리스트 하이라이트 변경
       renderGrid();
     }
 
-    // 작은 카드리스트 그리기
     function renderGrid() {
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
@@ -209,23 +254,19 @@
       });
     }
 
-    // 카테고리 필터 변경
     function filterCategory(category, btn) {
       currentFilter = category;
       
-      // 버튼 스타일 업데이트
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
       renderGrid();
     }
 
-    // 클릭 시 음성 재생
     function speakCurrentCar() {
       speak(currentCar.desc);
     }
 
-    // 음성합성(TTS) 읽기 함수
     function speak(text) {
       window.speechSynthesis.cancel();
       const speech = new SpeechSynthesisUtterance(text);
