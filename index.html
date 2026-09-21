@@ -51,11 +51,11 @@
       color: white;
     }
 
-    /* 메인 전시 카드 (터치하면 소리남) */
+    /* 메인 전시 카드 */
     .main-card {
       width: 100%;
       max-width: 360px;
-      height: 320px;
+      height: 300px;
       background: white;
       border: 6px solid #FFB300;
       border-radius: 25px;
@@ -66,19 +66,19 @@
       justify-content: space-between;
       padding: 15px;
       cursor: pointer;
-      transition: transform 0.1s;
-      overflow: hidden;
+      user-select: none;
     }
 
     .main-card:active {
-      transform: scale(0.96);
+      transform: scale(0.97);
     }
 
     .main-card img {
       width: 100%;
-      height: 220px;
+      height: 200px;
       object-fit: cover;
       border-radius: 15px;
+      background-color: #f0f0f0;
     }
 
     .car-title {
@@ -88,7 +88,7 @@
       margin-top: 5px;
     }
 
-    /* 자동차 그리드 선택창 */
+    /* 자동차 목록 그리드 */
     .grid-container {
       width: 100%;
       max-width: 360px;
@@ -116,9 +116,10 @@
 
     .thumb-card img {
       width: 100%;
-      height: 65px;
+      height: 60px;
       object-fit: cover;
       border-radius: 8px;
+      background-color: #f0f0f0;
     }
 
     .thumb-card span {
@@ -141,7 +142,7 @@
     <button class="filter-btn" onclick="filterCategory('super', this)">슈퍼카</button>
   </div>
 
-  <!-- 큰 카드 (메인 실물 사진) -->
+  <!-- 큰 메인 사진 카드 -->
   <div class="main-card" onclick="speakCurrentCar()">
     <img id="main-img" src="" alt="자동차 사진">
     <div class="car-title" id="main-title"></div>
@@ -151,7 +152,7 @@
   <div class="grid-container" id="grid"></div>
 
   <script>
-    // 자동차 실물 고화질 사진 데이터
+    // 안정성이 보장된 위키미디어 / 글로벌 CDN 실물 자동차 이미지 URL
     const cars = [
       // 일하는 차
       { 
@@ -159,14 +160,14 @@
         category: 'work', 
         name: "소방차", 
         desc: "삐뽀삐뽀! 불을 끄는 빨간 소방차!", 
-        img: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80" 
+        img: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=500" 
       },
       { 
         id: 2, 
         category: 'work', 
         name: "덤프트럭", 
         desc: "쿵쾅쿵쾅! 흙을 가득 나르는 덤프트럭!", 
-        img: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=600&q=80" 
+        img: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=500" 
       },
       
       // 버스 / 일반차
@@ -174,22 +175,22 @@
         id: 3, 
         category: 'bus', 
         name: "버스", 
-        desc: "부르릉! 손님을 많이 태우는 버스!", 
-        img: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=600&q=80" 
+        desc: "부르릉! 손님을 많이 태우는 큰 버스!", 
+        img: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=500" 
       },
       { 
         id: 4, 
         category: 'bus', 
         name: "타요 버스", 
-        desc: "안녕! 귀여운 파란색 타요 꼬마버스!", 
-        img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80" 
+        desc: "안녕! 귀여운 파란색 버스!", 
+        img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=500" 
       },
       { 
         id: 5, 
         category: 'bus', 
         name: "테슬라", 
         desc: "스윽~ 소리 없이 빠르게 달리는 전기차 테슬라!", 
-        img: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?auto=format&fit=crop&w=600&q=80" 
+        img: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=500" 
       },
 
       // 스포츠카 / 슈퍼카
@@ -197,22 +198,22 @@
         id: 6, 
         category: 'super', 
         name: "스포츠카", 
-        desc: "쌩쌩! 도로를 신나게 달리는 스포츠카!", 
-        img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80" 
+        desc: "쌩쌩! 도로를 신나게 달리는 빨간 스포츠카!", 
+        img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500" 
       },
       { 
         id: 7, 
         category: 'super', 
         name: "페라리", 
-        desc: "쿠앙! 정말 빠르게 달리는 빨간색 페라리!", 
-        img: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=600&q=80" 
+        desc: "쿠앙! 정말 빠르게 달리는 페라리!", 
+        img: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=500" 
       },
       { 
         id: 8, 
         category: 'super', 
         name: "람보르기니", 
         desc: "콰아앙! 황소처럼 멋지고 강한 람보르기니!", 
-        img: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=600&q=80" 
+        img: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=500" 
       }
     ];
 
@@ -220,16 +221,20 @@
     let currentFilter = 'all';
 
     function init() {
-      selectCar(cars[0]);
+      selectCar(cars[0], false); // 첫 로딩 시 자동 소리 끔
       renderGrid();
     }
 
-    function selectCar(car) {
+    function selectCar(car, shouldSpeak = true) {
       currentCar = car;
-      document.getElementById('main-img').src = car.img;
+      const mainImg = document.getElementById('main-img');
+      
+      mainImg.src = car.img;
       document.getElementById('main-title').textContent = car.name;
       
-      speak(car.desc);
+      if (shouldSpeak) {
+        speak(car.desc);
+      }
       renderGrid();
     }
 
@@ -244,7 +249,7 @@
       filteredCars.forEach(car => {
         const thumb = document.createElement('div');
         thumb.className = `thumb-card ${car.id === currentCar.id ? 'active' : ''}`;
-        thumb.onclick = () => selectCar(car);
+        thumb.onclick = () => selectCar(car, true);
 
         thumb.innerHTML = `
           <img src="${car.img}" alt="${car.name}">
@@ -268,12 +273,18 @@
     }
 
     function speak(text) {
-      window.speechSynthesis.cancel();
-      const speech = new SpeechSynthesisUtterance(text);
-      speech.lang = 'ko-KR';
-      speech.rate = 0.9;
-      speech.pitch = 1.2;
-      window.speechSynthesis.speak(speech);
+      try {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const speech = new SpeechSynthesisUtterance(text);
+          speech.lang = 'ko-KR';
+          speech.rate = 0.9;
+          speech.pitch = 1.2;
+          window.speechSynthesis.speak(speech);
+        }
+      } catch (e) {
+        console.log("음성 보조 에러:", e);
+      }
     }
 
     window.onload = init;
