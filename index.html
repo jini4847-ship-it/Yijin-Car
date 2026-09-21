@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚗 빵빵! 자동차 친구들 🚗</title>
+  <style>
+    body {
+      font-family: 'GmarketSans', sans-serif;
+      background-color: #f0f8ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .card-container {
+      position: relative;
+      width: 300px;
+      height: 400px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .card-container img {
+      width: 80%;
+      height: auto;
+      max-height: 250px;
+      object-fit: contain;
+    }
+    .car-name {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-top: 15px;
+      color: #333;
+    }
+    .instruction {
+      margin-top: 15px;
+      color: #777;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🚗 빵빵! 자동차 친구들 🚗</h1>
+
+  <div class="card-container" id="card" onclick="playSound()">
+    <img id="car-img" src="" alt="자동차 이미지">
+    <div class="car-name" id="car-name"></div>
+  </div>
+
+  <p class="instruction">👈 카드를 옆으로 넘겨보세요! (터치하면 소리가 나요) 👉</p>
+
+  <script>
+    const cars = [
+      { name: "소방차", img: "https://cdn-icons-png.flaticon.com/512/3209/3209995.png", sound: "siren.mp3" },
+      { name: "포클레인", img: "https://cdn-icons-png.flaticon.com/512/2328/2328966.png", sound: "excavator.mp3" },
+      { name: "경찰차", img: "https://cdn-icons-png.flaticon.com/512/1023/1023756.png", sound: "police.mp3" },
+      { name: "택시", img: "https://cdn-icons-png.flaticon.com/512/1048/1048313.png", sound: "honk.mp3" }
+    ];
+
+    let currentIndex = 0;
+
+    function renderCard() {
+      const currentCar = cars[currentIndex];
+      document.getElementById("car-img").src = currentCar.img;
+      document.getElementById("car-name").textContent = currentCar.name;
+    }
+
+    function playSound() {
+      // 소리 파일이 있을 때 재생 로직
+      console.log(cars[currentIndex].name + " 소리 재생!");
+      // const audio = new Audio(cars[currentIndex].sound);
+      // audio.play();
+    }
+
+    // 카드 초기화
+    renderCard();
+
+    // 기존 Animal-Swipe의 터치/슬라이드 이벤트 구현부 연결...
+  </script>
+</body>
+</html>
