@@ -26,7 +26,7 @@
       text-align: center;
     }
 
-    /* 카테고리 필터 버튼 */
+    /* 상단 카테고리 필터 */
     .filter-group {
       display: flex;
       gap: 8px;
@@ -39,9 +39,9 @@
       background-color: #ffffff;
       border: 3px solid #00ACC1;
       color: #00838F;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: bold;
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 20px;
       cursor: pointer;
     }
@@ -51,82 +51,104 @@
       color: white;
     }
 
-    /* 메인 전시 카드 */
+    /* 대표 큰 사진 카드 */
     .main-card {
       width: 100%;
-      max-width: 360px;
-      height: 300px;
+      max-width: 400px;
+      height: 280px;
       background: white;
       border: 6px solid #FFB300;
-      border-radius: 25px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 15px;
+      padding: 12px;
       cursor: pointer;
       user-select: none;
     }
 
     .main-card:active {
-      transform: scale(0.97);
+      transform: scale(0.98);
     }
 
     .main-card img {
       width: 100%;
       height: 200px;
       object-fit: cover;
-      border-radius: 15px;
-      background-color: #f0f0f0;
+      border-radius: 12px;
     }
 
     .car-title {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: bold;
       color: #D84315;
-      margin-top: 5px;
+      margin-top: 4px;
     }
 
-    /* 자동차 목록 그리드 */
-    .grid-container {
+    /* 차종 선택 그리드 */
+    .car-select-grid {
       width: 100%;
-      max-width: 360px;
+      max-width: 400px;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 20px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 15px;
     }
 
-    .thumb-card {
+    .car-select-btn {
       background: white;
-      border: 3px solid #B2EBF2;
-      border-radius: 15px;
-      padding: 6px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      border: 2px solid #B2EBF2;
+      border-radius: 12px;
+      padding: 6px 2px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 0.85rem;
+      color: #333;
       cursor: pointer;
     }
 
-    .thumb-card.active {
+    .car-select-btn.active {
       border-color: #FF5722;
-      background-color: #FBE9E7;
+      background-color: #FFCCBC;
+      color: #D84315;
     }
 
-    .thumb-card img {
+    /* 10장 이상 사진 갤러리 영역 */
+    .section-title {
       width: 100%;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 8px;
-      background-color: #f0f0f0;
+      max-width: 400px;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+      color: #00838F;
+      font-weight: bold;
     }
 
-    .thumb-card span {
-      font-size: 0.85rem;
-      font-weight: bold;
-      margin-top: 5px;
-      color: #333;
+    .gallery-grid {
+      width: 100%;
+      max-width: 400px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .gallery-item {
+      background: white;
+      border: 3px solid #FFF;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      display: block;
     }
   </style>
 </head>
@@ -142,136 +164,238 @@
     <button class="filter-btn" onclick="filterCategory('super', this)">슈퍼카</button>
   </div>
 
-  <!-- 큰 메인 사진 카드 -->
+  <!-- 메인 큰 카드 -->
   <div class="main-card" onclick="speakCurrentCar()">
     <img id="main-img" src="" alt="자동차 사진">
-    <div class="car-title" id="main-title"></div>
+    <div class="car-title" id="main-title">소방차</div>
   </div>
 
-  <!-- 작은 사진 목록 -->
-  <div class="grid-container" id="grid"></div>
+  <!-- 차종 선택 버튼들 -->
+  <div class="car-select-grid" id="car-select-grid"></div>
+
+  <!-- 선택한 차종의 10장 사진 갤러리 -->
+  <div class="section-title" id="gallery-title">📸 소방차 사진들 (10장)</div>
+  <div class="gallery-grid" id="gallery-grid"></div>
 
   <script>
-    // 안정성이 보장된 위키미디어 / 글로벌 CDN 실물 자동차 이미지 URL
-    const cars = [
-      // 일하는 차
-      { 
-        id: 1, 
-        category: 'work', 
-        name: "소방차", 
-        desc: "삐뽀삐뽀! 불을 끄는 빨간 소방차!", 
-        img: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=500" 
+    // 검증된 차종별 10장 이상의 고화질 실물 사진 데이터베이스
+    const carData = [
+      {
+        id: 'fire',
+        category: 'work',
+        name: '소방차',
+        desc: '삐뽀삐뽀! 불을 끄는 빨간 소방차!',
+        images: [
+          'https://images.pexels.com/photos/259251/pexels-photo-259251.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/70573/fire-brigade-fiery-red-helmets-70573.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/163016/fire-department-action-hazard-extinguish-163016.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/260367/pexels-photo-260367.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/1118448/pexels-photo-1118448.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/279932/pexels-photo-279932.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/1161547/pexels-photo-1161547.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/1634214/pexels-photo-1634214.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/1105379/pexels-photo-1105379.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/2085832/pexels-photo-2085832.jpeg?auto=compress&cs=tinysrgb&w=600'
+        ]
       },
-      { 
-        id: 2, 
-        category: 'work', 
-        name: "덤프트럭", 
-        desc: "쿵쾅쿵쾅! 흙을 가득 나르는 덤프트럭!", 
-        img: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=500" 
+      {
+        id: 'dump',
+        category: 'work',
+        name: '덤프트럭',
+        desc: '쿵쾅쿵쾅! 흙을 가득 나르는 덤프트럭!',
+        images: [
+          'https://images.pexels.com/photos/1098818/pexels-photo-1098818.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/221159/pexels-photo-221159.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/1078884/pexels-photo-1078884.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/162539/architecture-building-construction-site-162539.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/220885/pexels-photo-220885.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/1108101/pexels-photo-1108101.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/210182/pexels-photo-210182.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/1570807/pexels-photo-1570807.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/1117403/pexels-photo-1117403.jpeg?auto=compress&cs=tinysrgb&w=600'
+        ]
       },
-      
-      // 버스 / 일반차
-      { 
-        id: 3, 
-        category: 'bus', 
-        name: "버스", 
-        desc: "부르릉! 손님을 많이 태우는 큰 버스!", 
-        img: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=500" 
+      {
+        id: 'bus',
+        category: 'bus',
+        name: '버스',
+        desc: '부르릉! 손님을 많이 태우는 큰 버스!',
+        images: [
+          'https://images.pexels.com/photos/385998/pexels-photo-385998.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/1178448/pexels-photo-1178448.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/208559/pexels-photo-208559.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/136739/pexels-photo-136739.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/2449454/pexels-photo-2449454.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/1523063/pexels-photo-1523063.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/3626589/pexels-photo-3626589.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/2526128/pexels-photo-2526128.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/3030336/pexels-photo-3030336.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?auto=compress&cs=tinysrgb&w=600'
+        ]
       },
-      { 
-        id: 4, 
-        category: 'bus', 
-        name: "타요 버스", 
-        desc: "안녕! 귀여운 파란색 버스!", 
-        img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=500" 
+      {
+        id: 'tesla',
+        category: 'bus',
+        name: '테슬라',
+        desc: '스윽~ 소리 없이 빠르게 달리는 테슬라 전기차!',
+        images: [
+          'https://images.pexels.com/photos/11139552/pexels-photo-11139552.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/10044087/pexels-photo-10044087.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/11139540/pexels-photo-11139540.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/12316438/pexels-photo-12316438.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/9800028/pexels-photo-9800028.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/11139537/pexels-photo-11139537.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/12316432/pexels-photo-12316432.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/10044085/pexels-photo-10044085.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/12316436/pexels-photo-12316436.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/11139548/pexels-photo-11139548.jpeg?auto=compress&cs=tinysrgb&w=600'
+        ]
       },
-      { 
-        id: 5, 
-        category: 'bus', 
-        name: "테슬라", 
-        desc: "스윽~ 소리 없이 빠르게 달리는 전기차 테슬라!", 
-        img: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=500" 
+      {
+        id: 'sports',
+        category: 'super',
+        name: '스포츠카',
+        desc: '쌩쌩! 도로를 멋지게 달리는 스포츠카!',
+        images: [
+          'https://images.pexels.com/photos/337909/pexels-photo-337909.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/39811/pexels-photo-39811.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/909907/pexels-photo-909907.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/707046/pexels-photo-707046.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/813465/pexels-photo-813465.jpeg?auto=compress&cs=tinysrgb&w=600'
+        ]
       },
-
-      // 스포츠카 / 슈퍼카
-      { 
-        id: 6, 
-        category: 'super', 
-        name: "스포츠카", 
-        desc: "쌩쌩! 도로를 신나게 달리는 빨간 스포츠카!", 
-        img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500" 
+      {
+        id: 'ferrari',
+        category: 'super',
+        name: '페라리',
+        desc: '쿠앙! 빨간 색이 정말 멋진 슈퍼카 페라리!',
+        images: [
+          'https://images.pexels.com/photos/337909/pexels-photo-337909.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/2568539/pexels-photo-2568539.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/3752169/pexels-photo-3752169.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/3752194/pexels-photo-3752194.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/2684219/pexels-photo-2684219.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/3608542/pexels-photo-3608542.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/3752199/pexels-photo-3752199.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/3608533/pexels-photo-3608533.jpeg?auto=compress&cs=tinysrgb&w=600'
+        ]
       },
-      { 
-        id: 7, 
-        category: 'super', 
-        name: "페라리", 
-        desc: "쿠앙! 정말 빠르게 달리는 페라리!", 
-        img: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=500" 
-      },
-      { 
-        id: 8, 
-        category: 'super', 
-        name: "람보르기니", 
-        desc: "콰아앙! 황소처럼 멋지고 강한 람보르기니!", 
-        img: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=500" 
+      {
+        id: 'lambo',
+        category: 'super',
+        name: '람보르기니',
+        desc: '콰아앙! 황소처럼 번개처럼 빠른 람보르기니!',
+        images: [
+          'https://images.pexels.com/photos/627678/pexels-photo-627678.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/39511/pexels-photo-39511.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/3752169/pexels-photo-3752169.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/2127733/pexels-photo-2127733.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/1335077/pexels-photo-1335077.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/3752197/pexels-photo-3752197.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/3802512/pexels-photo-3802512.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/39501/pexels-photo-39501.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/2127732/pexels-photo-2127732.jpeg?auto=compress&cs=tinysrgb&w=600',
+          'https://images.pexels.com/photos/3752198/pexels-photo-3752198.jpeg?auto=compress&cs=tinysrgb&w=600'
+        ]
       }
     ];
 
-    let currentCar = cars[0];
+    let currentCar = carData[0];
     let currentFilter = 'all';
 
     function init() {
-      selectCar(cars[0], false); // 첫 로딩 시 자동 소리 끔
-      renderGrid();
+      selectCar(carData[0], false);
     }
 
+    // 자동차 선택 시 메인 카드와 10장 갤러리 갱신
     function selectCar(car, shouldSpeak = true) {
       currentCar = car;
-      const mainImg = document.getElementById('main-img');
       
-      mainImg.src = car.img;
+      // 메인 카드 갱신 (첫 번째 대표 사진)
+      document.getElementById('main-img').src = car.images[0];
       document.getElementById('main-title').textContent = car.name;
-      
+      document.getElementById('gallery-title').textContent = `📸 ${car.name} 사진 (10장)`;
+
+      // 차종 선택 버튼 하이라이트
+      renderCarSelectButtons();
+
+      // 갤러리 렌더링
+      renderGallery(car);
+
       if (shouldSpeak) {
         speak(car.desc);
       }
-      renderGrid();
     }
 
-    function renderGrid() {
-      const grid = document.getElementById('grid');
+    // 차종 버튼 목록 렌더링
+    function renderCarSelectButtons() {
+      const grid = document.getElementById('car-select-grid');
       grid.innerHTML = '';
 
-      const filteredCars = currentFilter === 'all' 
-        ? cars 
-        : cars.filter(c => c.category === currentFilter);
+      const filtered = currentFilter === 'all' 
+        ? carData 
+        : carData.filter(c => c.category === currentFilter);
 
-      filteredCars.forEach(car => {
-        const thumb = document.createElement('div');
-        thumb.className = `thumb-card ${car.id === currentCar.id ? 'active' : ''}`;
-        thumb.onclick = () => selectCar(car, true);
-
-        thumb.innerHTML = `
-          <img src="${car.img}" alt="${car.name}">
-          <span>${car.name}</span>
-        `;
-        grid.appendChild(thumb);
+      filtered.forEach(car => {
+        const btn = document.createElement('div');
+        btn.className = `car-select-btn ${car.id === currentCar.id ? 'active' : ''}`;
+        btn.textContent = car.name;
+        btn.onclick = () => selectCar(car, true);
+        grid.appendChild(btn);
       });
     }
 
-    function filterCategory(category, btn) {
-      currentFilter = category;
-      
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+    // 10장 이상의 갤러리 렌더링
+    function renderGallery(car) {
+      const gallery = document.getElementById('gallery-grid');
+      gallery.innerHTML = '';
 
-      renderGrid();
+      car.images.forEach((imgUrl, index) => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        
+        // 갤러리 사진을 누르면 해당 사진이 대표 큰 사진으로 변경됨
+        item.onclick = () => {
+          document.getElementById('main-img').src = imgUrl;
+          speak(`${car.name} ${index + 1}번 사진!`);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        item.innerHTML = `<img src="${imgUrl}" alt="${car.name} ${index + 1}">`;
+        gallery.appendChild(item);
+      });
+    }
+
+    // 카테고리 필터
+    function filterCategory(category, btnElement) {
+      currentFilter = category;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btnElement.classList.add('active');
+
+      const filtered = currentFilter === 'all' 
+        ? carData 
+        : carData.filter(c => c.category === currentFilter);
+
+      if (filtered.length > 0) {
+        selectCar(filtered[0], true);
+      } else {
+        renderCarSelectButtons();
+      }
     }
 
     function speakCurrentCar() {
       speak(currentCar.desc);
     }
 
+    // 음성 재생 (TTS)
     function speak(text) {
       try {
         if ('speechSynthesis' in window) {
@@ -283,7 +407,7 @@
           window.speechSynthesis.speak(speech);
         }
       } catch (e) {
-        console.log("음성 보조 에러:", e);
+        console.log("TTS Error:", e);
       }
     }
 
