@@ -3,89 +3,239 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🚗 빵빵! 자동차 친구들 🚗</title>
+  <title>🚗 빵빵! 자동차 박물관 🚗</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       font-family: 'GmarketSans', sans-serif;
-      background-color: #f0f8ff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      background-color: #E0F7FA;
       margin: 0;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
-    .card-container {
-      position: relative;
-      width: 300px;
-      height: 400px;
-      background: #ffffff;
+
+    h1 {
+      font-size: 1.8rem;
+      color: #006064;
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    /* 카테고리 필터 버튼 */
+    .filter-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      background-color: #ffffff;
+      border: 3px solid #00ACC1;
+      color: #00838F;
+      font-size: 1.1rem;
+      font-weight: bold;
+      padding: 8px 16px;
       border-radius: 20px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background-color: #00ACC1;
+      color: white;
+    }
+
+    /* 메인 전시 카드 (터치하면 소리남) */
+    .main-card {
+      width: 100%;
+      max-width: 360px;
+      height: 280px;
+      background: white;
+      border: 6px solid #FFB300;
+      border-radius: 25px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 15px;
       cursor: pointer;
-      user-select: none;
+      transition: transform 0.1s;
     }
-    .card-container img {
-      width: 80%;
-      height: auto;
-      max-height: 250px;
+
+    .main-card:active {
+      transform: scale(0.96);
+    }
+
+    .main-card img {
+      width: 100%;
+      height: 180px;
       object-fit: contain;
     }
-    .car-name {
+
+    .car-title {
       font-size: 2rem;
       font-weight: bold;
-      margin-top: 15px;
-      color: #333;
+      color: #D84315;
+      margin-top: 10px;
     }
-    .instruction {
-      margin-top: 15px;
-      color: #777;
-      font-size: 0.9rem;
+
+    /* 자동차 그리드 선택창 */
+    .grid-container {
+      width: 100%;
+      max-width: 360px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .thumb-card {
+      background: white;
+      border: 3px solid #B2EBF2;
+      border-radius: 15px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .thumb-card.active {
+      border-color: #FF5722;
+      background-color: #FBE9E7;
+    }
+
+    .thumb-card img {
+      width: 100%;
+      height: 60px;
+      object-fit: contain;
+    }
+
+    .thumb-card span {
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-top: 5px;
+      color: #333;
     }
   </style>
 </head>
 <body>
 
-  <h1>🚗 빵빵! 자동차 친구들 🚗</h1>
+  <h1>🚗 빵빵! 자동차 박물관 🚗</h1>
 
-  <div class="card-container" id="card" onclick="playSound()">
-    <img id="car-img" src="" alt="자동차 이미지">
-    <div class="car-name" id="car-name"></div>
+  <!-- 카테고리 필터 -->
+  <div class="filter-group">
+    <button class="filter-btn active" onclick="filterCategory('all', this)">전체보기</button>
+    <button class="filter-btn" onclick="filterCategory('work', this)">일하는 차</button>
+    <button class="filter-btn" onclick="filterCategory('bus', this)">버스/승용차</button>
+    <button class="filter-btn" onclick="filterCategory('super', this)">슈퍼카</button>
   </div>
 
-  <p class="instruction">👈 카드를 옆으로 넘겨보세요! (터치하면 소리가 나요) 👉</p>
+  <!-- 큰 카드 (메인) -->
+  <div class="main-card" onclick="speakCurrentCar()">
+    <img id="main-img" src="" alt="자동차 이미지">
+    <div class="car-title" id="main-title"></div>
+  </div>
+
+  <!-- 아이가 누를 수 있는 자동차 리스트 -->
+  <div class="grid-container" id="grid"></div>
 
   <script>
+    // 자동차 데이터 세팅
     const cars = [
-      { name: "소방차", img: "https://cdn-icons-png.flaticon.com/512/3209/3209995.png", sound: "siren.mp3" },
-      { name: "포클레인", img: "https://cdn-icons-png.flaticon.com/512/2328/2328966.png", sound: "excavator.mp3" },
-      { name: "경찰차", img: "https://cdn-icons-png.flaticon.com/512/1023/1023756.png", sound: "police.mp3" },
-      { name: "택시", img: "https://cdn-icons-png.flaticon.com/512/1048/1048313.png", sound: "honk.mp3" }
+      // 일하는 차
+      { id: 1, category: 'work', name: "소방차", desc: "삐뽀삐뽀! 불을 끄는 소방차!", img: "https://cdn-icons-png.flaticon.com/512/3209/3209995.png" },
+      { id: 2, category: 'work', name: "덤프트럭", desc: "쿵쾅쿵쾅! 흙을 나르는 덤프트럭!", img: "https://cdn-icons-png.flaticon.com/512/2554/2554932.png" },
+      
+      // 버스 / 일반차
+      { id: 3, category: 'bus', name: "버스", desc: "부르릉! 손님을 태우는 큰 버스!", img: "https://cdn-icons-png.flaticon.com/512/3448/3448339.png" },
+      { id: 4, category: 'bus', name: "타요 버스", desc: "안녕! 나는 파란색 꼬마버스 타요!", img: "https://cdn-icons-png.flaticon.com/512/1048/1048313.png" },
+      { id: 5, category: 'bus', name: "테슬라", desc: "스윽~ 소리 없이 달리는 전기차 테슬라!", img: "https://cdn-icons-png.flaticon.com/512/820/820374.png" },
+
+      // 스포츠카 / 슈퍼카
+      { id: 6, category: 'super', name: "스포츠카", desc: "쌩쌩! 정말 빠른 빨간 스포츠카!", img: "https://cdn-icons-png.flaticon.com/512/744/744465.png" },
+      { id: 7, category: 'super', name: "페라리", desc: "쿠앙! 삼각 말 마크가 멋진 슈퍼카 페라리!", img: "https://cdn-icons-png.flaticon.com/512/296/296216.png" },
+      { id: 8, category: 'super', name: "람보르기니", desc: "콰아앙! 황소처럼 멋진 슈퍼카 람보르기니!", img: "https://cdn-icons-png.flaticon.com/512/1085/1085961.png" }
     ];
 
-    let currentIndex = 0;
+    let currentCar = cars[0];
+    let currentFilter = 'all';
 
-    function renderCard() {
-      const currentCar = cars[currentIndex];
-      document.getElementById("car-img").src = currentCar.img;
-      document.getElementById("car-name").textContent = currentCar.name;
+    // 화면 초기화
+    function init() {
+      selectCar(cars[0]);
+      renderGrid();
     }
 
-    function playSound() {
-      // 소리 파일이 있을 때 재생 로직
-      console.log(cars[currentIndex].name + " 소리 재생!");
-      // const audio = new Audio(cars[currentIndex].sound);
-      // audio.play();
+    // 메인 카드 변경 및 읽어주기
+    function selectCar(car) {
+      currentCar = car;
+      document.getElementById('main-img').src = car.img;
+      document.getElementById('main-title').textContent = car.name;
+      
+      // 음성 재생
+      speak(car.desc);
+
+      // 리스트 하이라이트 변경
+      renderGrid();
     }
 
-    // 카드 초기화
-    renderCard();
+    // 작은 카드리스트 그리기
+    function renderGrid() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
 
-    // 기존 Animal-Swipe의 터치/슬라이드 이벤트 구현부 연결...
+      const filteredCars = currentFilter === 'all' 
+        ? cars 
+        : cars.filter(c => c.category === currentFilter);
+
+      filteredCars.forEach(car => {
+        const thumb = document.createElement('div');
+        thumb.className = `thumb-card ${car.id === currentCar.id ? 'active' : ''}`;
+        thumb.onclick = () => selectCar(car);
+
+        thumb.innerHTML = `
+          <img src="${car.img}" alt="${car.name}">
+          <span>${car.name}</span>
+        `;
+        grid.appendChild(thumb);
+      });
+    }
+
+    // 카테고리 필터 변경
+    function filterCategory(category, btn) {
+      currentFilter = category;
+      
+      // 버튼 스타일 업데이트
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      renderGrid();
+    }
+
+    // 클릭 시 음성 재생
+    function speakCurrentCar() {
+      speak(currentCar.desc);
+    }
+
+    // 음성합성(TTS) 읽기 함수
+    function speak(text) {
+      window.speechSynthesis.cancel();
+      const speech = new SpeechSynthesisUtterance(text);
+      speech.lang = 'ko-KR';
+      speech.rate = 0.9;
+      speech.pitch = 1.2;
+      window.speechSynthesis.speak(speech);
+    }
+
+    window.onload = init;
   </script>
 </body>
 </html>
