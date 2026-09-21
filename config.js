@@ -1,1 +1,1 @@
-const PEXELS_API_KEY = "YOUR_PEXELS_API_KEY";
+const PEXELS_API_KEY = "DHeqz69eBgKltWOgA0twG0vgdTdtaTYWyLTQD3AHr2w9blOzdzw9ce4U";
