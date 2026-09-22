@@ -1,143 +1,268 @@
 const CAR_CATEGORIES = {
+
+
   "소방차": {
+
     emoji: "🚒",
-    search: [
-      "Korean fire truck",
-      "South Korea fire truck",
-      "Korea fire engine",
-      "Seoul fire truck"
-    ],
-    name: "소방차"
+
+    name: "소방차",
+
+    search:
+      "South Korean fire truck",
+
+    keywords: [
+      "fire truck",
+      "fire engine",
+      "fire vehicle",
+      "소방차"
+    ]
+
   },
+
 
   "경찰차": {
+
     emoji: "🚓",
-    search: [
-      "Korean police car",
-      "South Korea police car",
-      "Korea police vehicle",
-      "Seoul police car"
-    ],
-    name: "경찰차"
+
+    name: "경찰차",
+
+    search:
+      "South Korean police car",
+
+    keywords: [
+      "police car",
+      "police vehicle",
+      "police",
+      "경찰차"
+    ]
+
   },
+
 
   "구급차": {
+
     emoji: "🚑",
-    search: [
-      "Korean ambulance",
-      "South Korea ambulance",
-      "Korea ambulance",
-      "Seoul ambulance"
-    ],
-    name: "구급차"
+
+    name: "구급차",
+
+    search:
+      "South Korean ambulance",
+
+    keywords: [
+      "ambulance",
+      "medical vehicle",
+      "구급차"
+    ]
+
   },
+
 
   "버스": {
+
     emoji: "🚌",
-    search: [
-      "Korean city bus",
-      "South Korea bus",
-      "Seoul city bus"
-    ],
-    name: "버스"
+
+    name: "버스",
+
+    search:
+      "South Korean city bus",
+
+    keywords: [
+      "city bus",
+      "bus",
+      "bus vehicle",
+      "버스"
+    ]
+
   },
+
 
   "테슬라": {
+
     emoji: "⚡",
-    search: [
+
+    name: "테슬라",
+
+    search:
       "Tesla car",
-      "Tesla Model 3",
-      "Tesla Model Y"
-    ],
-    name: "테슬라"
+
+    keywords: [
+      "tesla",
+      "model 3",
+      "model y",
+      "model s",
+      "model x"
+    ]
+
   },
+
 
   "사이버트럭": {
+
     emoji: "🛻",
-    search: [
-      "Tesla Cybertruck"
-    ],
-    name: "사이버트럭"
+
+    name: "사이버트럭",
+
+    search:
+      "Tesla Cybertruck",
+
+    keywords: [
+      "cybertruck",
+      "tesla cybertruck"
+    ]
+
   },
+
 
   "페라리": {
+
     emoji: "🏎️",
-    search: [
+
+    name: "페라리",
+
+    search:
       "Ferrari car",
-      "Ferrari supercar"
-    ],
-    name: "페라리"
+
+    keywords: [
+      "ferrari"
+    ]
+
   },
+
 
   "람보르기니": {
+
     emoji: "🐂",
-    search: [
+
+    name: "람보르기니",
+
+    search:
       "Lamborghini car",
-      "Lamborghini supercar"
-    ],
-    name: "람보르기니"
+
+    keywords: [
+      "lamborghini"
+    ]
+
   },
+
 
   "덤프트럭": {
+
     emoji: "🚛",
-    search: [
+
+    name: "덤프트럭",
+
+    search:
       "dump truck",
-      "construction dump truck"
-    ],
-    name: "덤프트럭"
+
+    keywords: [
+      "dump truck",
+      "dumptruck"
+    ]
+
   },
 
+
   "다른 자동차": {
+
     emoji: "🚘",
+
     name: "자동차"
+
   }
+
 };
 
 
+
+/*
+========================================
+
+다른 자동차
+
+========================================
+*/
+
 const OTHER_CARS = [
+
   {
     search: "sports car",
     name: "스포츠카",
-    emoji: "🏎️"
+    emoji: "🏎️",
+    keywords: [
+      "sports car"
+    ]
   },
-  {
-    search: "race car",
-    name: "경주용 자동차",
-    emoji: "🏎️"
-  },
+
+
   {
     search: "supercar",
     name: "슈퍼카",
-    emoji: "🏎️"
+    emoji: "🏎️",
+    keywords: [
+      "supercar"
+    ]
   },
+
+
   {
     search: "taxi car",
     name: "택시",
-    emoji: "🚕"
+    emoji: "🚕",
+    keywords: [
+      "taxi"
+    ]
   },
+
+
   {
-    search: "SUV",
+    search: "SUV car",
     name: "SUV",
-    emoji: "🚙"
+    emoji: "🚙",
+    keywords: [
+      "SUV"
+    ]
   },
+
+
   {
     search: "pickup truck",
     name: "픽업트럭",
-    emoji: "🛻"
+    emoji: "🛻",
+    keywords: [
+      "pickup truck"
+    ]
   },
+
+
   {
     search: "school bus",
     name: "스쿨버스",
-    emoji: "🚌"
+    emoji: "🚌",
+    keywords: [
+      "school bus",
+      "bus"
+    ]
   },
+
+
   {
     search: "classic car",
     name: "클래식 자동차",
-    emoji: "🚗"
+    emoji: "🚗",
+    keywords: [
+      "classic car"
+    ]
   },
+
+
   {
     search: "electric car",
     name: "전기자동차",
-    emoji: "⚡"
+    emoji: "⚡",
+    keywords: [
+      "electric car",
+      "electric vehicle"
+    ]
   }
+
 ];
