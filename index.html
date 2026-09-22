@@ -1,401 +1,197 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width,
-             initial-scale=1.0,
-             maximum-scale=1.0,
-             user-scalable=no"
-  >
-
-  <meta
-    name="theme-color"
-    content="#f5f7fa"
-  >
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <title>🚗 자동차 친구 🚗</title>
 
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
-
+  <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
+  <!-- =========================
+       홈 화면
+  ========================== -->
+  <div id="homeScreen" class="screen">
 
-<!-- =========================
-     처음 카테고리 화면
-========================= -->
+    <div class="home-header">
+      <h1>🚗 자동차 친구 🚗</h1>
+      <p>보고 싶은 자동차를 눌러보세요!</p>
+    </div>
 
-<section
-  id="homeScreen"
-  class="screen"
->
+    <div id="categoryGrid" class="category-grid">
 
-  <header>
-
-    <h1>
-      🚗 자동차 친구 🚗
-    </h1>
-
-    <p>
-      어떤 자동차를 볼까요?
-    </p>
-
-  </header>
-
-
-  <main>
-
-    <div class="category-grid">
-
-
-      <button
-        class="category-card"
-        data-category="소방차"
-      >
-
-        <div class="category-icon">
-          🚒
-        </div>
-
-        <div class="category-name">
-          소방차
-        </div>
-
+      <!-- 소방차 -->
+      <button class="category-card" data-category="소방차">
+        <div class="category-emoji">🚒</div>
+        <div class="category-name">소방차</div>
       </button>
 
-
-      <button
-        class="category-card"
-        data-category="경찰차"
-      >
-
-        <div class="category-icon">
-          🚓
-        </div>
-
-        <div class="category-name">
-          경찰차
-        </div>
-
+      <!-- 경찰차 -->
+      <button class="category-card" data-category="경찰차">
+        <div class="category-emoji">🚓</div>
+        <div class="category-name">경찰차</div>
       </button>
 
-
-      <button
-        class="category-card"
-        data-category="구급차"
-      >
-
-        <div class="category-icon">
-          🚑
-        </div>
-
-        <div class="category-name">
-          구급차
-        </div>
-
+      <!-- 구급차 -->
+      <button class="category-card" data-category="구급차">
+        <div class="category-emoji">🚑</div>
+        <div class="category-name">구급차</div>
       </button>
 
-
-      <button
-        class="category-card"
-        data-category="버스"
-      >
-
-        <div class="category-icon">
-          🚌
-        </div>
-
-        <div class="category-name">
-          버스
-        </div>
-
+      <!-- 버스 -->
+      <button class="category-card" data-category="버스">
+        <div class="category-emoji">🚌</div>
+        <div class="category-name">버스</div>
       </button>
 
-
-      <button
-        class="category-card"
-        data-category="테슬라"
-      >
-
-        <div class="category-icon">
-          ⚡
-        </div>
-
-        <div class="category-name">
-          테슬라
-        </div>
-
+      <!-- 테슬라 -->
+      <button class="category-card" data-category="테슬라">
+        <div class="category-emoji">⚡</div>
+        <div class="category-name">테슬라</div>
       </button>
 
-
-      <button
-        class="category-card"
-        data-category="페라리"
-      >
-
-        <div class="category-icon">
-          🏎️
-        </div>
-
-        <div class="category-name">
-          페라리
-        </div>
-
+      <!-- 사이버트럭 -->
+      <button class="category-card" data-category="사이버트럭">
+        <div class="category-emoji">🛻</div>
+        <div class="category-name">사이버트럭</div>
       </button>
 
-
-      <button
-        class="category-card"
-        data-category="람보르기니"
-      >
-
-        <div class="category-icon">
-          🐂
-        </div>
-
-        <div class="category-name">
-          람보르기니
-        </div>
-
+      <!-- 페라리 -->
+      <button class="category-card" data-category="페라리">
+        <div class="category-emoji">🏎️</div>
+        <div class="category-name">페라리</div>
       </button>
 
-
-      <!-- 랜덤 자동차 대신 -->
-      <button
-        class="category-card other-car"
-        data-category="다른 자동차"
-      >
-
-        <div class="category-icon">
-          🚘
-        </div>
-
-        <div class="category-name">
-          다른 자동차
-        </div>
-
+      <!-- 람보르기니 -->
+      <button class="category-card" data-category="람보르기니">
+        <div class="category-emoji">🐂</div>
+        <div class="category-name">람보르기니</div>
       </button>
 
+      <!-- 덤프트럭 -->
+      <button class="category-card" data-category="덤프트럭">
+        <div class="category-emoji">🚛</div>
+        <div class="category-name">덤프트럭</div>
+      </button>
+
+      <!-- 다른 자동차 - 항상 마지막 -->
+      <button class="category-card" data-category="다른 자동차">
+        <div class="category-emoji">🚘</div>
+        <div class="category-name">다른 자동차</div>
+      </button>
 
     </div>
 
-  </main>
+  </div>
 
 
-  <footer>
-    🚗 자동차 친구 🚗
-  </footer>
+  <!-- =========================
+       사진 갤러리 화면
+  ========================== -->
+  <div id="galleryScreen" class="screen gallery-screen">
 
-</section>
+    <!-- 상단 -->
+    <div class="gallery-header">
 
+      <button id="backButton" class="back-button">
+        ← 뒤로
+      </button>
 
-
-<!-- =========================
-     자동차 사진 화면
-========================= -->
-
-<section
-  id="galleryScreen"
-  class="screen hidden"
->
-
-
-  <header class="gallery-header">
-
-    <button
-      id="backButton"
-      class="back-button"
-    >
-      ←
-    </button>
-
-
-    <div>
-
-      <h1 id="galleryTitle">
-        🚗 자동차
-      </h1>
-
-      <p id="gallerySubtitle">
-        자동차를 구경해요!
-      </p>
+      <div class="gallery-title-area">
+        <h2 id="galleryTitle">자동차</h2>
+        <p id="gallerySubtitle">멋진 자동차를 찾아볼까요?</p>
+      </div>
 
     </div>
-
-  </header>
-
-
-
-  <main class="gallery-main">
 
 
     <!-- 로딩 -->
-
-    <div
-      id="loading"
-      class="loading hidden"
-    >
-
-      🚗
-      <br>
-
-      자동차를 찾고 있어요...
-
+    <div id="loading" class="loading">
+      🚗 자동차를 찾고 있어요...
     </div>
 
 
-
-    <!-- 큰 사진 -->
-
-    <div
-      id="photoBox"
-      class="photo-box"
-    >
+    <!-- 사진 영역 -->
+    <div id="photoBox" class="photo-box">
 
       <img
         id="carImage"
         src=""
-        alt="자동차"
-        draggable="false"
+        alt="자동차 사진"
       >
 
+      <!-- 사진을 불러오지 못했을 때 보여줄 이모지 -->
+      <div id="emojiBox" class="emoji-box">
+        🚗
+      </div>
 
-      <div
-        id="photoHint"
-        class="photo-hint"
-      >
+      <div class="photo-info">
 
-        👆 눌러보세요!
+        <div id="carName" class="car-name">
+          자동차
+        </div>
+
+        <div id="carCategory" class="car-category">
+          자동차
+        </div>
 
       </div>
 
     </div>
 
 
-
-    <!-- API 오류나 사진이 없을 때 -->
-
-    <div
-      id="emojiBox"
-      class="emoji-box hidden"
-    >
+    <!-- 사진 설명 -->
+    <div id="photoHint" class="photo-hint">
+      사진을 눌러보세요! 🔊
     </div>
 
 
-
-    <!-- 자동차 이름 -->
-
-    <div
-      id="carName"
-      class="car-name"
-    >
-      자동차
-    </div>
-
-
-    <div
-      id="carCategory"
-      class="car-category"
-    >
-    </div>
-
-
-
-    <!-- 음성 -->
-
-    <button
-      id="speakButton"
-      class="speak-button"
-    >
-
-      🔊 이름 듣기
-
+    <!-- 음성 버튼 -->
+    <button id="speakButton" class="speak-button">
+      🔊 자동차 이름 듣기
     </button>
-
 
 
     <!-- 사진 출처 -->
+    <div id="credit" class="credit"></div>
 
-    <div
-      id="credit"
-      class="credit"
-    >
+
+    <!-- 오류 메시지 -->
+    <div id="error" class="error"></div>
+
+
+    <!-- 이전 / 다음 -->
+    <div class="navigation">
+
+      <button id="prevButton" class="nav-button">
+        ◀
+      </button>
+
+      <div id="counter" class="counter">
+        0 / 0
+      </div>
+
+      <button id="nextButton" class="nav-button">
+        ▶
+      </button>
+
     </div>
-
-
-
-    <!-- 오류 -->
-
-    <div
-      id="error"
-      class="error hidden"
-    >
-    </div>
-
-
-  </main>
-
-
-
-  <!-- 이전 / 다음 -->
-
-  <div class="navigation">
-
-
-    <button
-      id="prevButton"
-      class="nav-button"
-    >
-      ⬅️
-    </button>
-
-
-    <div
-      id="counter"
-      class="counter"
-    >
-    </div>
-
-
-    <button
-      id="nextButton"
-      class="nav-button"
-    >
-      ➡️
-    </button>
-
 
   </div>
 
 
-  <footer>
+  <!-- 설정 -->
+  <script src="config.js"></script>
 
-    🚗 자동차 친구 🚗
+  <!-- 자동차 데이터 -->
+  <script src="cars.js"></script>
 
-  </footer>
-
-
-</section>
-
-
-
-<script src="config.js"></script>
-
-<script src="cars.js"></script>
-
-<script src="script.js"></script>
-
+  <!-- 앱 기능 -->
+  <script src="script.js"></script>
 
 </body>
-
 </html>
