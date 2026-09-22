@@ -1,39 +1,65 @@
-let currentCategory = "소방차";
+// ========================================
+// 상태
+// ========================================
+
+let currentCategory = "";
 
 let photos = [];
 
 let currentIndex = 0;
 
 let touchStartX = 0;
+
 let touchStartY = 0;
 
 
-// --------------------------------------------------
+// ========================================
 // DOM
-// --------------------------------------------------
+// ========================================
 
-const carImage = document.getElementById("carImage");
+const homeScreen =
+  document.getElementById("homeScreen");
 
-const carName = document.getElementById("carName");
+const galleryScreen =
+  document.getElementById("galleryScreen");
 
-const carCategory = document.getElementById("carCategory");
+const galleryTitle =
+  document.getElementById("galleryTitle");
 
-const counter = document.getElementById("counter");
+const gallerySubtitle =
+  document.getElementById("gallerySubtitle");
 
-const loading = document.getElementById("loading");
+const carImage =
+  document.getElementById("carImage");
 
-const errorBox = document.getElementById("error");
+const carName =
+  document.getElementById("carName");
 
-const credit = document.getElementById("credit");
+const carCategory =
+  document.getElementById("carCategory");
 
-const photoBox = document.getElementById("photoBox");
+const counter =
+  document.getElementById("counter");
 
-const emojiBox = document.getElementById("emojiBox");
+const loading =
+  document.getElementById("loading");
+
+const errorBox =
+  document.getElementById("error");
+
+const credit =
+  document.getElementById("credit");
+
+const photoBox =
+  document.getElementById("photoBox");
+
+const emojiBox =
+  document.getElementById("emojiBox");
 
 
-// --------------------------------------------------
+// ========================================
 // API 키 확인
-// --------------------------------------------------
+// ========================================
 
 function hasApiKey() {
 
@@ -43,16 +69,53 @@ function hasApiKey() {
 
     PEXELS_API_KEY !== "" &&
 
-    PEXELS_API_KEY !== "YOUR_PEXELS_API_KEY"
+    PEXELS_API_KEY !==
+      "YOUR_PEXELS_API_KEY"
 
   );
 
 }
 
 
-// --------------------------------------------------
+// ========================================
+// 화면 전환
+// ========================================
+
+function openGallery(category) {
+
+  currentCategory = category;
+
+  currentIndex = 0;
+
+  photos = [];
+
+  homeScreen.classList.add("hidden");
+
+  galleryScreen.classList.remove("hidden");
+
+  window.scrollTo(0, 0);
+
+  loadCars(category);
+
+}
+
+
+function goHome() {
+
+  speechSynthesis.cancel();
+
+  galleryScreen.classList.add("hidden");
+
+  homeScreen.classList.remove("hidden");
+
+  window.scrollTo(0, 0);
+
+}
+
+
+// ========================================
 // 로딩
-// --------------------------------------------------
+// ========================================
 
 function showLoading() {
 
@@ -68,9 +131,9 @@ function hideLoading() {
 }
 
 
-// --------------------------------------------------
-// 에러
-// --------------------------------------------------
+// ========================================
+// 오류
+// ========================================
 
 function showError(message) {
 
@@ -88,86 +151,107 @@ function hideError() {
 }
 
 
-// --------------------------------------------------
-// 카테고리 변경
-// --------------------------------------------------
+// ========================================
+// 자동차 가져오기
+// ========================================
 
-async function selectCategory(category) {
-
-  currentCategory = category;
-
-  currentIndex = 0;
-
-  photos = [];
+async function loadCars(category) {
 
   hideError();
 
   showLoading();
 
-  carName.textContent = "자동차를 찾고 있어요!";
+  photoBox.classList.add("hidden");
 
-  carCategory.textContent = category;
-
-  counter.textContent = "";
+  emojiBox.classList.add("hidden");
 
   credit.textContent = "";
 
+  counter.textContent = "";
 
-  updateCategoryButtons();
 
+  /*
+   * 다른 자동차
+   */
+
+  if (category === "다른 자동차") {
+
+    await loadOtherCars();
+
+    return;
+
+  }
+
+
+  const info =
+    CAR_CATEGORIES[category];
+
+
+  galleryTitle.textContent =
+    info.emoji + " " + category;
+
+
+  gallerySubtitle.textContent =
+    "좋아하는 " +
+    category +
+    "를 만나보세요!";
+
+
+  /*
+   * API 키가 없으면
+   * 이모지를 보여준다.
+   */
 
   if (!hasApiKey()) {
 
     hideLoading();
 
-    showEmoji();
-
-    carName.textContent =
-      CAR_CATEGORIES[category].name;
+    showEmoji(info);
 
     showError(
       "config.js에 Pexels API 키를 넣어주세요."
     );
 
     return;
+
   }
 
 
   try {
 
-    const search =
-      CAR_CATEGORIES[category].search;
-
-
     const url =
+
       "https://api.pexels.com/v1/search" +
 
       "?query=" +
 
-      encodeURIComponent(search) +
+      encodeURIComponent(info.search) +
 
-      "&per_page=20" +
+      "&per_page=30" +
 
       "&page=1" +
 
       "&orientation=landscape";
 
 
-    const response = await fetch(
+    const response =
 
-      url,
+      await fetch(
 
-      {
+        url,
 
-        headers: {
+        {
 
-          Authorization: PEXELS_API_KEY
+          headers: {
+
+            Authorization:
+              PEXELS_API_KEY
+
+          }
 
         }
 
-      }
-
-    );
+      );
 
 
     if (!response.ok) {
@@ -190,10 +274,17 @@ async function selectCategory(category) {
     if (photos.length === 0) {
 
       throw new Error(
-        "사진이 없습니다."
+        "사진 없음"
       );
 
     }
+
+
+    /*
+     * 사진을 랜덤하게 섞는다.
+     */
+
+    shuffle(photos);
 
 
     hideLoading();
@@ -208,10 +299,7 @@ async function selectCategory(category) {
 
     hideLoading();
 
-    showEmoji();
-
-    carName.textContent =
-      CAR_CATEGORIES[category].name;
+    showEmoji(info);
 
     showError(
       "사진을 불러오지 못했어요."
@@ -222,24 +310,176 @@ async function selectCategory(category) {
 }
 
 
-// --------------------------------------------------
-// 사진 보여주기
-// --------------------------------------------------
+// ========================================
+// 다른 자동차
+// ========================================
 
-function showPhoto() {
+async function loadOtherCars() {
 
-  if (photos.length === 0) {
+  galleryTitle.textContent =
+    "🚘 다른 자동차";
 
-    showEmoji();
+  gallerySubtitle.textContent =
+    "어떤 자동차가 나올까요?";
+
+
+  if (!hasApiKey()) {
+
+    hideLoading();
+
+    showEmoji(
+      CAR_CATEGORIES["다른 자동차"]
+    );
+
+    showError(
+      "config.js에 Pexels API 키를 넣어주세요."
+    );
 
     return;
 
   }
 
 
-  emojiBox.classList.add("hidden");
+  try {
+
+    /*
+     * 여러 검색어 중에서
+     * 랜덤으로 하나 선택
+     */
+
+    const randomType =
+      OTHER_CARS[
+        Math.floor(
+          Math.random() *
+          OTHER_CARS.length
+        )
+      ];
+
+
+    const url =
+
+      "https://api.pexels.com/v1/search" +
+
+      "?query=" +
+
+      encodeURIComponent(
+        randomType.search
+      ) +
+
+      "&per_page=20" +
+
+      "&page=1" +
+
+      "&orientation=landscape";
+
+
+    const response =
+
+      await fetch(
+
+        url,
+
+        {
+
+          headers: {
+
+            Authorization:
+              PEXELS_API_KEY
+
+          }
+
+        }
+
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Pexels API 오류"
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    photos =
+      data.photos || [];
+
+
+    if (photos.length === 0) {
+
+      throw new Error(
+        "사진 없음"
+      );
+
+    }
+
+
+    /*
+     * 랜덤 순서
+     */
+
+    shuffle(photos);
+
+
+    /*
+     * 이번에 선택된 자동차 종류를
+     * 표시하기 위한 정보
+     */
+
+    window.otherCarName =
+      randomType.name;
+
+    window.otherCarEmoji =
+      randomType.emoji;
+
+
+    hideLoading();
+
+    showPhoto();
+
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    hideLoading();
+
+    showEmoji(
+      CAR_CATEGORIES["다른 자동차"]
+    );
+
+    showError(
+      "자동차 사진을 불러오지 못했어요."
+    );
+
+  }
+
+}
+
+
+// ========================================
+// 사진 보여주기
+// ========================================
+
+function showPhoto() {
+
+  if (photos.length === 0) {
+
+    return;
+
+  }
+
 
   photoBox.classList.remove("hidden");
+
+  emojiBox.classList.add("hidden");
 
 
   const photo =
@@ -250,25 +490,58 @@ function showPhoto() {
     photo.src.large;
 
 
-  carImage.alt =
-    CAR_CATEGORIES[currentCategory].name;
+  /*
+   * 일반 카테고리
+   */
+
+  if (
+    currentCategory !==
+    "다른 자동차"
+  ) {
+
+    const info =
+      CAR_CATEGORIES[
+        currentCategory
+      ];
 
 
-  carName.textContent =
-    CAR_CATEGORIES[currentCategory].name;
+    carName.textContent =
+      info.name;
+
+    carCategory.textContent =
+      currentCategory;
+
+  }
 
 
-  carCategory.textContent =
-    currentCategory;
+  /*
+   * 다른 자동차
+   */
+
+  else {
+
+    carName.textContent =
+      window.otherCarName ||
+      "자동차";
+
+    carCategory.textContent =
+      "다른 자동차";
+
+  }
 
 
   counter.textContent =
     `${currentIndex + 1} / ${photos.length}`;
 
 
+  /*
+   * Pexels 출처
+   */
+
   if (photo.photographer) {
 
     credit.innerHTML =
+
       `📷 Photo by ` +
 
       `<a href="${photo.photographer_url}" ` +
@@ -277,7 +550,9 @@ function showPhoto() {
 
       `rel="noopener">` +
 
-      escapeHtml(photo.photographer) +
+      escapeHtml(
+        photo.photographer
+      ) +
 
       `</a> on Pexels`;
 
@@ -287,11 +562,11 @@ function showPhoto() {
 }
 
 
-// --------------------------------------------------
-// 이모지 화면
-// --------------------------------------------------
+// ========================================
+// 이모지
+// ========================================
 
-function showEmoji() {
+function showEmoji(info) {
 
   photoBox.classList.add("hidden");
 
@@ -299,12 +574,11 @@ function showEmoji() {
 
 
   emojiBox.textContent =
-    CAR_CATEGORIES[currentCategory].emoji;
+    info.emoji;
 
 
   carName.textContent =
-    CAR_CATEGORIES[currentCategory].name;
-
+    info.name;
 
   carCategory.textContent =
     currentCategory;
@@ -312,9 +586,9 @@ function showEmoji() {
 }
 
 
-// --------------------------------------------------
-// 다음 자동차
-// --------------------------------------------------
+// ========================================
+// 다음
+// ========================================
 
 function nextCar() {
 
@@ -328,7 +602,10 @@ function nextCar() {
   currentIndex++;
 
 
-  if (currentIndex >= photos.length) {
+  if (
+    currentIndex >=
+    photos.length
+  ) {
 
     currentIndex = 0;
 
@@ -340,9 +617,9 @@ function nextCar() {
 }
 
 
-// --------------------------------------------------
-// 이전 자동차
-// --------------------------------------------------
+// ========================================
+// 이전
+// ========================================
 
 function previousCar() {
 
@@ -369,47 +646,41 @@ function previousCar() {
 }
 
 
-// --------------------------------------------------
-// 랜덤
-// --------------------------------------------------
+// ========================================
+// 랜덤 섞기
+// ========================================
 
-function randomCar() {
+function shuffle(array) {
 
-  if (photos.length <= 1) {
+  for (
+    let i = array.length - 1;
+    i > 0;
+    i--
+  ) {
 
-    return;
-
-  }
-
-
-  let newIndex;
-
-
-  do {
-
-    newIndex =
+    const j =
       Math.floor(
-        Math.random() * photos.length
+        Math.random() *
+        (i + 1)
       );
 
+
+    [
+      array[i],
+      array[j]
+    ] = [
+      array[j],
+      array[i]
+    ];
+
   }
-
-  while (
-    newIndex === currentIndex
-  );
-
-
-  currentIndex = newIndex;
-
-
-  showPhoto();
 
 }
 
 
-// --------------------------------------------------
+// ========================================
 // 음성
-// --------------------------------------------------
+// ========================================
 
 function speakCar() {
 
@@ -425,19 +696,46 @@ function speakCar() {
   speechSynthesis.cancel();
 
 
-  const text =
-    CAR_CATEGORIES[currentCategory].name;
+  let text;
+
+
+  if (
+    currentCategory ===
+    "다른 자동차"
+  ) {
+
+    text =
+      window.otherCarName ||
+      "자동차";
+
+  }
+
+  else {
+
+    text =
+      CAR_CATEGORIES[
+        currentCategory
+      ].name;
+
+  }
 
 
   const speech =
-    new SpeechSynthesisUtterance(text);
+    new SpeechSynthesisUtterance(
+      text
+    );
 
 
-  speech.lang = "ko-KR";
+  speech.lang =
+    "ko-KR";
 
-  speech.rate = 0.8;
 
-  speech.pitch = 1.1;
+  speech.rate =
+    0.8;
+
+
+  speech.pitch =
+    1.1;
 
 
   speechSynthesis.speak(
@@ -447,78 +745,12 @@ function speakCar() {
 }
 
 
-// --------------------------------------------------
-// 카테고리 버튼 표시
-// --------------------------------------------------
-
-function updateCategoryButtons() {
-
-  const buttons =
-    document.querySelectorAll(
-      ".categories button"
-    );
-
-
-  buttons.forEach(button => {
-
-    if (
-      button.dataset.category ===
-      currentCategory
-    ) {
-
-      button.classList.add("active");
-
-    }
-
-    else {
-
-      button.classList.remove("active");
-
-    }
-
-  });
-
-}
-
-
-// --------------------------------------------------
-// HTML 문자 처리
-// --------------------------------------------------
-
-function escapeHtml(text) {
-
-  return String(text)
-    .replace(
-      /[&<>"']/g,
-
-      function(character) {
-
-        return {
-
-          "&": "&amp;",
-
-          "<": "&lt;",
-
-          ">": "&gt;",
-
-          '"': "&quot;",
-
-          "'": "&#039;"
-
-        }[character];
-
-      }
-
-    );
-
-}
-
-
-// --------------------------------------------------
+// ========================================
 // 사진 터치
-// --------------------------------------------------
+// ========================================
 
 photoBox.addEventListener(
+
   "click",
 
   function() {
@@ -543,9 +775,9 @@ photoBox.addEventListener(
 );
 
 
-// --------------------------------------------------
+// ========================================
 // 스와이프 시작
-// --------------------------------------------------
+// ========================================
 
 photoBox.addEventListener(
 
@@ -573,9 +805,9 @@ photoBox.addEventListener(
 );
 
 
-// --------------------------------------------------
+// ========================================
 // 스와이프 끝
-// --------------------------------------------------
+// ========================================
 
 photoBox.addEventListener(
 
@@ -629,22 +861,23 @@ photoBox.addEventListener(
 );
 
 
-// --------------------------------------------------
-// 버튼
-// --------------------------------------------------
+// ========================================
+// 카테고리 버튼
+// ========================================
 
 document
   .querySelectorAll(
-    ".categories button"
+    ".category-card"
   )
   .forEach(button => {
 
     button.addEventListener(
+
       "click",
 
       function() {
 
-        selectCategory(
+        openGallery(
           this.dataset.category
         );
 
@@ -655,8 +888,28 @@ document
   });
 
 
+// ========================================
+// 뒤로가기
+// ========================================
+
 document
-  .getElementById("nextButton")
+  .getElementById(
+    "backButton"
+  )
+  .addEventListener(
+    "click",
+    goHome
+  );
+
+
+// ========================================
+// 다음 / 이전
+// ========================================
+
+document
+  .getElementById(
+    "nextButton"
+  )
   .addEventListener(
     "click",
     nextCar
@@ -664,31 +917,58 @@ document
 
 
 document
-  .getElementById("prevButton")
+  .getElementById(
+    "prevButton"
+  )
   .addEventListener(
     "click",
     previousCar
   );
 
 
-document
-  .getElementById("randomButton")
-  .addEventListener(
-    "click",
-    randomCar
-  );
-
+// ========================================
+// 음성 버튼
+// ========================================
 
 document
-  .getElementById("speakButton")
+  .getElementById(
+    "speakButton"
+  )
   .addEventListener(
     "click",
     speakCar
   );
 
 
-// --------------------------------------------------
-// 처음 실행
-// --------------------------------------------------
+// ========================================
+// HTML 문자 처리
+// ========================================
 
-selectCategory("소방차");
+function escapeHtml(text) {
+
+  return String(text)
+
+    .replace(
+      /[&<>"']/g,
+
+      function(character) {
+
+        return {
+
+          "&": "&amp;",
+
+          "<": "&lt;",
+
+          ">": "&gt;",
+
+          '"': "&quot;",
+
+          "'": "&#039;"
+
+        }[character];
+
+      }
+
+    );
+
+}
