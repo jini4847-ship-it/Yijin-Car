@@ -1,55 +1,89 @@
 const CAR_CATEGORIES = {
   "소방차": {
     emoji: "🚒",
-    search: "fire truck",
+    search: [
+      "Korean fire truck",
+      "South Korea fire truck",
+      "Korea fire engine",
+      "Seoul fire truck"
+    ],
     name: "소방차"
   },
 
   "경찰차": {
     emoji: "🚓",
-    search: "police car",
+    search: [
+      "Korean police car",
+      "South Korea police car",
+      "Korea police vehicle",
+      "Seoul police car"
+    ],
     name: "경찰차"
   },
 
   "구급차": {
     emoji: "🚑",
-    search: "ambulance",
+    search: [
+      "Korean ambulance",
+      "South Korea ambulance",
+      "Korea ambulance",
+      "Seoul ambulance"
+    ],
     name: "구급차"
   },
 
   "버스": {
     emoji: "🚌",
-    search: "city bus",
+    search: [
+      "Korean city bus",
+      "South Korea bus",
+      "Seoul city bus"
+    ],
     name: "버스"
   },
 
   "테슬라": {
     emoji: "⚡",
-    search: "Tesla car",
+    search: [
+      "Tesla car",
+      "Tesla Model 3",
+      "Tesla Model Y"
+    ],
     name: "테슬라"
   },
 
   "사이버트럭": {
     emoji: "🛻",
-    search: "Tesla Cybertruck",
+    search: [
+      "Tesla Cybertruck"
+    ],
     name: "사이버트럭"
   },
 
   "페라리": {
     emoji: "🏎️",
-    search: "Ferrari car",
+    search: [
+      "Ferrari car",
+      "Ferrari supercar"
+    ],
     name: "페라리"
   },
 
   "람보르기니": {
     emoji: "🐂",
-    search: "Lamborghini car",
+    search: [
+      "Lamborghini car",
+      "Lamborghini supercar"
+    ],
     name: "람보르기니"
   },
 
   "덤프트럭": {
     emoji: "🚛",
-    search: "dump truck",
+    search: [
+      "dump truck",
+      "construction dump truck"
+    ],
     name: "덤프트럭"
   },
 
@@ -82,7 +116,7 @@ const OTHER_CARS = [
     emoji: "🚕"
   },
   {
-    search: "jeep SUV",
+    search: "SUV",
     name: "SUV",
     emoji: "🚙"
   },
@@ -95,11 +129,6 @@ const OTHER_CARS = [
     search: "school bus",
     name: "스쿨버스",
     emoji: "🚌"
-  },
-  {
-    search: "fire engine",
-    name: "소방차",
-    emoji: "🚒"
   },
   {
     search: "classic car",
